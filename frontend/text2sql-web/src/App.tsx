@@ -17,7 +17,10 @@ export default function App() {
     setRows([]);
 
     try {
-      const res = await fetch("http://localhost:5000/api/generate-and-run", {
+      const API_BASE =
+        import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+
+      const res = await fetch(`${API_BASE}/api/generate-and-run`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt }),
