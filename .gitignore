@@ -197,4 +197,13 @@ CodeCoverage/
 TestResult.xml
 nunit-*.xml
 
+# Secrets
+.env
 **/appsettings.Development.json
+
+# .NET build
+**/bin/
+**/obj/
+
+# Node
+**/node_modules/

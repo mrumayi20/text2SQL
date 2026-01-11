@@ -1,0 +1,29 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: text2sql-sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=${MSSQL_SA_PASSWORD}
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+
+  api:
+    build:
+      context: ./backend/Text2Sql.Api
+    container_name: text2sql-api
+    environment:
+      - ASPNETCORE_URLS=http://0.0.0.0:5000
+      - OpenRouter__ApiKey=${OPENROUTER_API_KEY}
+      - OpenRouter__Model=mistralai/mistral-7b-instruct:free
+      # IMPORTANT: inside Docker, SQL Server host is "sqlserver", not localhost
+      - ConnectionStrings__SqlServer=Server=sqlserver,1433;Database=Text2SqlDemo;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=True;Encrypt=False;
+    ports:
+      - "5000:5000"
+    depends_on:
+      - sqlserver
+
+volumes:
+  sqlserver_data:

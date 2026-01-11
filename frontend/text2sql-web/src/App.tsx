@@ -6,14 +6,18 @@ export default function App() {
   const [sql, setSql] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [columns, setColumns] = useState<string[]>([]);
+  const [rows, setRows] = useState<any[][]>([]);
 
   async function generateSql() {
     setLoading(true);
     setError("");
     setSql("");
+    setColumns([]);
+    setRows([]);
 
     try {
-      const res = await fetch("http://localhost:5000/api/generate-sql", {
+      const res = await fetch("http://localhost:5000/api/generate-and-run", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt }),
@@ -24,8 +28,15 @@ export default function App() {
         throw new Error(msg || `Request failed: ${res.status}`);
       }
 
-      const data = (await res.json()) as { sql: string };
+      const data = (await res.json()) as {
+        sql: string;
+        columns: string[];
+        rows: any[][];
+      };
+
       setSql(data.sql);
+      setColumns(data.columns);
+      setRows(data.rows);
     } catch (e: any) {
       setError(e?.message ?? "Something went wrong");
     } finally {
@@ -78,6 +89,50 @@ export default function App() {
       >
         {sql || "—"}
       </pre>
+      {columns.length > 0 && (
+        <div style={{ marginTop: 20 }}>
+          <h2>Results</h2>
+          <div style={{ overflowX: "auto" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+              <thead>
+                <tr>
+                  {columns.map((c) => (
+                    <th
+                      key={c}
+                      style={{
+                        textAlign: "left",
+                        borderBottom: "1px solid #ccc",
+                        padding: "8px",
+                      }}
+                    >
+                      {c}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((r, idx) => (
+                  <tr key={idx}>
+                    {r.map((cell, j) => (
+                      <td
+                        key={j}
+                        style={{
+                          borderBottom: "1px solid #eee",
+                          padding: "8px",
+                        }}
+                      >
+                        {cell === null || cell === undefined
+                          ? ""
+                          : String(cell)}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
