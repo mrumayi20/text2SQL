@@ -19,14 +19,14 @@ A simple MVP web app where a user types a request in plain English and the app:
 ## Project Structure
 
 .
-├── backend/
-│ └── Text2Sql.Api/ # ASP.NET Core Minimal API
-├── frontend/
-│ └── text2sql-web/ # React UI
-├── db/
-│ └── init.sql # DB seed script (Orders table)
-├── docker-compose.yml # SQL Server (+ API container if enabled)
-└── README.md
+├── backend/ <br>
+│ └── Text2Sql.Api/ # ASP.NET Core Minimal API<br>
+├── frontend/<br>
+│ └── text2sql-web/ # React UI<br>
+├── db/<br>
+│ └── init.sql # DB seed script (Orders table)<br>
+├── docker-compose.yml # SQL Server (+ API container if enabled)<br>
+└── README.md<br>
 
 ## How It Works (Request Flow)
 
@@ -49,14 +49,14 @@ A simple MVP web app where a user types a request in plain English and the app:
 
 ## Run Locally (Dev)
 
-1. Start SQL Server (Docker)
+1. Start SQL Server (Docker)<br>
    Make sure Docker Desktop is running.
 
 ```
 docker compose up -d
 ```
 
-2. Seed database
+2. Seed database<br>
    This creates Text2SqlDemo and dbo.Orders with sample data.
 
 ```
@@ -84,7 +84,7 @@ Open: http://localhost:5173
 
 ### OpenRouter
 
-Set API key and model using environment variables or user-secrets.
+Set API key and model using environment variables or user-secrets.<br>
 Example (Docker/.env):
 
 ```
@@ -94,25 +94,25 @@ MSSQL_SA_PASSWORD=your_password_here
 
 ### SQL Server Connection
 
-Local machine access: Server=localhost,1433
-Inside Docker access: Server=sqlserver,1433
+Local machine access: Server=localhost,1433<br>
+Inside Docker access: Server=sqlserver,1433<br>
 
 ### API Endpoints
 
-GET /api/test-db - checks DB connectivity
-POST /api/generate-sql - generates SQL only
-POST /api/generate-and-run - generates SQL and executes it, returns results
+GET /api/test-db - checks DB connectivity<br>
+POST /api/generate-sql - generates SQL only<br>
+POST /api/generate-and-run - generates SQL and executes it, returns results<br>
 
 ### Notes / Limitations
 
-This MVP supports a demo schema: Text2SqlDemo.dbo.Orders
-LLM "free" models can become unavailable; switching models may be required
-SQL execution is guarded (SELECT-only) but should be hardened further for production
+This MVP supports a demo schema: Text2SqlDemo.dbo.Orders<br>
+LLM "free" models can become unavailable; switching models may be required<br>
+SQL execution is guarded (SELECT-only) but should be hardened further for production<br>
 
 ### Future Improvements
 
-Add "Connect your DB" feature (schema introspection)
-Authentication and user workspaces
-Better SQL parsing with ScriptDom
-Pagination and sorting in UI
-Deploy frontend + backend + managed database
+Add "Connect your DB" feature (schema introspection)<br>
+Authentication and user workspaces<br>
+Better SQL parsing with ScriptDom<br>
+Pagination and sorting in UI<br>
+Deploy frontend + backend + managed database<br>
