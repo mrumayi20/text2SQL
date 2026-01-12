@@ -8,12 +8,12 @@ A simple MVP web app where a user types a request in plain English and the app:
 
 ## Screenshots
 
-![App Main Interface](./screenshots/ui-main.png)
-_Figure 1: Main interface showing natural language input and result table._
-
-![SQL Generation](./screenshots/query-result.png)
-_Figure 2: The generated T-SQL and the live database results._
-
+![App Main Interface](./screenshots/ui-main.PNG)
+**_Figure 1: Main interface showing natural language input and result table._
+**
+![SQL Generation](./screenshots/query-result.PNG)
+**_Figure 2: The generated T-SQL and the live database results._
+**
 ## Tech Stack
 
 - **Frontend:** React + TypeScript (Vite)
