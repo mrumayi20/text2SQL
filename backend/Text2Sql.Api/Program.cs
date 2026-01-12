@@ -139,11 +139,11 @@ app.MapPost("/api/generate-and-run", async (
         return Results.Problem("Missing ConnectionStrings:SqlServer");
 
     // IMPORTANT: give the model the schema so it generates correct SQL
-    //var schema = await GetDynamicSchema(connectionString);
-    var schema = """
-Database: Text2SqlDemo
-Table: dbo.Orders(Id int, CustomerName nvarchar(100), OrderDate date, TotalAmount decimal(10,2))
-""";
+    var schema = await GetDynamicSchema(connStr);
+    //     var schema = """
+    // Database: Text2SqlDemo
+    // Table: dbo.Orders(Id int, CustomerName nvarchar(100), OrderDate date, TotalAmount decimal(10,2))
+    // """;
 
     var systemPrompt = """
 You generate ONLY Microsoft SQL Server T-SQL.
@@ -235,40 +235,40 @@ Rules:
 });
 //It ensures that if you add new tables in your DB tomorrow, 
 //you don't have to touch your C# code at all—the AI will "see" the new tables immediately.
-// async Task<string> GetDynamicSchema(string connectionString)
-// {
-//     using var conn = new SqlConnection(connectionString);
-//     await conn.OpenAsync();
+async Task<string> GetDynamicSchema(string connectionString)
+{
+    using var conn = new SqlConnection(connectionString);
+    await conn.OpenAsync();
 
-//     // This query pulls every table and column name in your DB
-//     var query = @"
-//         SELECT TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME, DATA_TYPE 
-//         FROM INFORMATION_SCHEMA.COLUMNS 
-//         WHERE TABLE_SCHEMA = 'dbo'
-//         ORDER BY TABLE_NAME, ORDINAL_POSITION";
+    // This query pulls every table and column name in your DB
+    var query = @"
+        SELECT TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME, DATA_TYPE 
+        FROM INFORMATION_SCHEMA.COLUMNS 
+        WHERE TABLE_SCHEMA = 'dbo'
+        ORDER BY TABLE_NAME, ORDINAL_POSITION";
 
-//     using var cmd = new SqlCommand(query, conn);
-//     using var reader = await cmd.ExecuteReaderAsync();
+    using var cmd = new SqlCommand(query, conn);
+    using var reader = await cmd.ExecuteReaderAsync();
 
-//     var sb = new StringBuilder("Database: Text2SqlDemo\n");
-//     string currentTable = "";
+    var sb = new StringBuilder("Database: Text2SqlDemo\n");
+    string currentTable = "";
 
-//     while (await reader.ReadAsync())
-//     {
-//         string tableName = reader["TABLE_NAME"].ToString();
-//         if (tableName != currentTable)
-//         {
-//             if (currentTable != "") sb.Append(")\n");
-//             sb.Append($"Table: dbo.{tableName}(");
-//             currentTable = tableName;
-//         }
-//         else { sb.Append(", "); }
+    while (await reader.ReadAsync())
+    {
+        string tableName = reader["TABLE_NAME"].ToString();
+        if (tableName != currentTable)
+        {
+            if (currentTable != "") sb.Append(")\n");
+            sb.Append($"Table: dbo.{tableName}(");
+            currentTable = tableName;
+        }
+        else { sb.Append(", "); }
 
-//         sb.Append($"{reader["COLUMN_NAME"]} {reader["DATA_TYPE"]}");
-//     }
-//     sb.Append(")");
-//     return sb.ToString();
-// }
+        sb.Append($"{reader["COLUMN_NAME"]} {reader["DATA_TYPE"]}");
+    }
+    sb.Append(")");
+    return sb.ToString();
+}
 
 // Request type
 
