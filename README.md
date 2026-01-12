@@ -47,6 +47,34 @@ A simple MVP web app where a user types a request in plain English and the app:
 
 7. React displays SQL + results table
 
+## Important Commands (run them at root level)
+1. To see if the model that we are using is working
+```
+docker exec text2sql-api env | findstr Model
+```
+2. destroy the Container
+```
+docker compose down
+```
+3. Rebuild the app and get the app running
+```
+docker compose up --build -d
+```
+4. Print the real error JSON if your API is throwing 500 because OpenRouter is failing
+```
+try {
+  Invoke-RestMethod -Uri "http://localhost:5000/api/generate-and-run" `
+    -Method Post `
+    -ContentType "application/json" `
+    -Body (@{ prompt = "Show all orders" } | ConvertTo-Json)
+} catch {
+  $_.Exception.Response | Format-List StatusCode, StatusDescription
+  $reader = New-Object System.IO.StreamReader($_.Exception.Response.GetResponseStream())
+  $reader.ReadToEnd()
+}
+
+```
+
 ## Run Locally (Dev)
 
 1. Start SQL Server (Docker)<br>
