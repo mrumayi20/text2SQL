@@ -6,6 +6,14 @@ A simple MVP web app where a user types a request in plain English and the app:
 2. executes the query on a SQL Server database
 3. displays both the generated SQL and the results in the UI
 
+## Screenshots
+
+![App Main Interface](./screenshots/ui-main.png)
+_Figure 1: Main interface showing natural language input and result table._
+
+![SQL Generation](./screenshots/query-result.png)
+_Figure 2: The generated T-SQL and the live database results._
+
 ## Tech Stack
 
 - **Frontend:** React + TypeScript (Vite)
@@ -48,19 +56,27 @@ A simple MVP web app where a user types a request in plain English and the app:
 7. React displays SQL + results table
 
 ## Important Commands (run them at root level)
+
 1. To see if the model that we are using is working
+
 ```
 docker exec text2sql-api env | findstr Model
 ```
+
 2. destroy the Container
+
 ```
 docker compose down
 ```
+
 3. Rebuild the app and get the app running
+
 ```
 docker compose up --build -d
 ```
+
 4. Print the real error JSON if your API is throwing 500 because OpenRouter is failing
+
 ```
 try {
   Invoke-RestMethod -Uri "http://localhost:5000/api/generate-and-run" `
